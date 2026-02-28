@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filipe Teixeira - CV</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fafaf8;
+            --surface: #ffffff;
+            --text-primary: #2d2d2d;
+            --text-secondary: #6b6b6b;
+            --text-tertiary: #9a9a9a;
+            --accent: #c4a57b;
+            --accent-light: #e8dcc8;
+            --border: rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-weight: 300;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 100px 60px 80px;
+            width: 100%;
+        }
+
+        header {
+            margin-bottom: 60px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .profile-photo {
+            flex-shrink: 0;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-light);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-size: 2.8em;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            font-size: 0.95em;
+        }
+
+        .contact-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 2px;
+        }
+
+        .contact-item:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        main {
+            padding-top: 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .filter-container {
+            margin-bottom: 30px;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-tag {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85em;
+            font-weight: 400;
+            color: var(--text-secondary);
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-tag:hover {
+            background: var(--accent-light);
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+
+        .filter-tag.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .section {
+            margin-top: 0;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--border);
+            transition: opacity 0.3s ease, max-height 0.3s ease;
+        }
+
+        .section.hidden {
+            display: none;
+        }
+
+        .entry.hidden {
+            display: none;
+        }
+
+        .section:last-of-type {
+            border-bottom: none;
+        }
+
+        .section-header {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .section-header:hover .section-title {
+            color: var(--accent);
+        }
+
+        .section-title {
+            font-family: 'Lora', serif;
+            font-size: 1.5em;
+            font-weight: 500;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+            transition: color 0.2s ease;
+        }
+
+        .toggle-icon {
+            font-size: 1.1em;
+            color: var(--text-tertiary);
+            transition: all 0.3s ease;
+        }
+
+        .section-header:hover .toggle-icon {
+            color: var(--accent);
+        }
+
+        .section.collapsed .toggle-icon {
+            transform: rotate(-180deg);
+        }
+
+        .section-content {
+            max-height: 5000px;
+            opacity: 1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .section.collapsed .section-content {
+            max-height: 0;
+            opacity: 0;
+        }
+
+        .entry {
+            margin-bottom: 44px;
+        }
+
+        .entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+            gap: 20px;
+        }
+
+        .entry-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 1.05em;
+            letter-spacing: -0.01em;
+        }
+
+        .entry-date {
+            font-size: 0.85em;
+            color: var(--text-tertiary);
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .entry-subtitle {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .entry-description {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            line-height: 1.7;
+        }
+
+        .entry-description ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .entry-description li {
+            margin-bottom: 8px;
+        }
+
+        .entry-description li::marker {
+            color: var(--accent);
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-item {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .skill-item:hover {
+            background: var(--accent-light);
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+
+        footer {
+            margin-top: 100px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.85em;
+            color: var(--text-tertiary);
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Selection styling */
+        ::selection {
+            background: var(--accent-light);
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                max-width: 90%;
+                padding: 90px 50px 70px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 80px 30px 60px;
+                max-width: 100%;
+            }
+
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 24px;
+            }
+
+            .profile-photo {
+                width: 120px;
+                height: 120px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .subtitle {
+                font-size: 1em;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .entry-header {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .section {
+                padding: 32px 0;
+            }
+
+            .section-header {
+                margin-bottom: 24px;
+            }
+
+            .entry {
+                margin-bottom: 36px;
+            }
+
+            .filter-tags {
+                gap: 6px;
+            }
+
+            .filter-tag {
+                font-size: 0.8em;
+                padding: 7px 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 60px 20px 50px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .profile-photo {
+                width: 100px;
+                height: 100px;
+            }
+
+            .section-title {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="profilepic.jpg" alt="Profile Photo" class="profile-photo">
+            <div class="header-content">
+                <h1>Filipe Teixeira</h1>
+                <p class="subtitle">International Educator | PhD Geography | Mathematics & Data Science Specialist</p>
+                <div class="contact-info">
+                    <a href="https://linkedin.com/in/filipeamteixeira" class="contact-item" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="filter-container">
+                <div class="filter-label">Filter by:</div>
+                <div class="filter-tags">
+                    <button class="filter-tag active" data-filter="all">All</button>
+                    <button class="filter-tag" data-filter="k12">K-12 Teaching</button>
+                    <button class="filter-tag" data-filter="mathematics">Mathematics</button>
+                    <button class="filter-tag" data-filter="data-science">Data Science</button>
+                    <button class="filter-tag" data-filter="geography">Geography</button>
+                    <button class="filter-tag" data-filter="university">University Teaching</button>
+                    <button class="filter-tag" data-filter="music">Music</button>
+                    <button class="filter-tag" data-filter="languages">Languages</button>
+                </div>
+            </div>
+            <section class="section" data-tags="all k12 mathematics data-science geography university languages">
+                <div class="section-header">
+                    <h2 class="section-title">About</h2>
+                    <span class="toggle-icon">↓</span>
+                </div>
+                <div class="section-content">
+                    <p class="entry-description">
+                        Experienced international educator with doctoral training in Geography and extensive expertise in mathematics, statistics, and data science. Currently teaching at Yokohama International School with demonstrated experience delivering inquiry-based, student-centered learning in IB and international school environments. Proven ability to differentiate instruction for diverse learners, including gifted students requiring advanced curriculum and behavioral support. Strong background in educational technology, maker education, and transdisciplinary learning. Fluent in seven languages with proven ability to engage learners across grade levels and abilities.
+                    </p>
+                </div>
+            </section>
+
+            <section class="section" data-tags="all k12 mathematics">
+                <div class="section-header">
+                    <h2 class="section-title">K-12 Teaching Experience</h2>
+                    <span class="toggle-icon">↓</span>
+                </div>
+                <div class="section-content">
+                    <div class="entry" data-tags="all k12 mathematics">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Supply Teacher/Makerspace Coordinator</h3>
+                            <span class="entry-date">Dec 2025 - Present</span>
+                        </div>
+                        <p class="entry-subtitle">Yokohama International School, Japan</p>
+                        <div class="entry-description">
+                            <ul>
+                                <li>Delivered planned inquiry-based lessons across elementary grades, guiding students individually and in small groups</li>
+                                <li>Coordinated Makerspace programming, integrating hands-on design-based learning experiences</li>
+                                <li>Provided specialized one-on-one mathematics instruction to exceptionally gifted Grade 4 student working at university level</li>
+                                <li>Supported formative assessment tasks and contributed to daily school operations</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all k12">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Homeroom Teacher (Grade 3 Substitute)</h3>
+                            <span class="entry-date">Jan 2026 - Mar 2026</span>
+                        </div>
+                        <p class="entry-subtitle">Saint Maur International School, Yokohama, Japan</p>
+                        <div class="entry-description">
+                            <ul>
+                                <li>Assumed full homeroom responsibility, delivering transdisciplinary lessons aligned with IB principles</li>
+                                <li>Fostered supportive, student-centered learning environment</li>
+                                <li>Monitored student progress and maintained strong communication with families</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all k12">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Student Teacher (Grade 5)</h3>
+                            <span class="entry-date">Aug 2025 - Nov 2025</span>
+                        </div>
+                        <p class="entry-subtitle">Yokohama International School, Japan</p>
+                        <div class="entry-description">
+                            <ul>
+                                <li>Facilitated academic growth through small-group instruction and personalized support</li>
+                                <li>Led whole-class lessons integrating inquiry-based pedagogy and technology tools</li>
+                                <li>Collaborated on transdisciplinary unit planning and supervised field trips</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all k12">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Teaching Assistant (Volunteer)</h3>
+                            <span class="entry-date">May 2025 - Jun 2025</span>
+                        </div>
+                        <p class="entry-subtitle">International School of Amsterdam, The Netherlands</p>
+                        <div class="entry-description">
+                            <ul>
+                                <li>Provided targeted academic support to small groups and administered assessments</li>
+                                <li>Assisted in Maker's Space and led occasional whole-class instruction</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all k12">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Substitute Teacher</h3>
+                            <span class="entry-date">2004 - 2011</span>
+                        </div>
+                        <p class="entry-subtitle">Multiple Schools, Coimbra, Portugal</p>
+                        <div class="entry-description">
+                            <ul>
+                                <li>Worked across primary, middle, and secondary schools delivering effective classroom coverage</li>
+                                <li>Demonstrated flexibility, strong classroom management, and ability to engage diverse learners</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all k12">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Science Workshop Coordinator</h3>
+                            <span class="entry-date">2009 - 2011</span>
+                        </div>
+                        <p class="entry-subtitle">'Science for All' Programme, University of Coimbra, Portugal</p>
+                        <div class="entry-description">
+                            Organized and taught hands-on science workshops for children aged 7-12, fostering inquiry-based learning and scientific curiosity through engaging, age-appropriate activities.
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all music k12">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Piano & Music Theory Instructor</h3>
+                            <span class="entry-date">2002 - 2006</span>
+                        </div>
+                        <p class="entry-subtitle">Music Conservatorium of Coimbra, Portugal</p>
+                        <div class="entry-description">
+                            Taught piano, improvisational skills, and music theory to students aged 12-18.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" data-tags="all geography data-science mathematics music">
+                <div class="section-header">
+                    <h2 class="section-title">Education</h2>
+                    <span class="toggle-icon">↓</span>
+                </div>
+                <div class="section-content">
+                    <div class="entry">
+                        <div class="entry-header">
+                            <h3 class="entry-title">PhD in Geography</h3>
+                            <span class="entry-date">2020</span>
+                        </div>
+                        <p class="entry-subtitle">SEG, Ghent University, Belgium</p>
+                    </div>
+
+                    <div class="entry">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Teacher Certification Programme</h3>
+                            <span class="entry-date">2024</span>
+                        </div>
+                        <p class="entry-subtitle">Moreland University, Washington DC, USA</p>
+                        <div class="entry-description">
+                            DC Teaching License
+                        </div>
+                    </div>
+
+                    <div class="entry">
+                        <div class="entry-header">
+                            <h3 class="entry-title">MSc in Biochemistry</h3>
+                            <span class="entry-date">2011</span>
+                        </div>
+                        <p class="entry-subtitle">University of Coimbra, Portugal</p>
+                        <div class="entry-description">
+                            Specialization: Cognitive Neurosciences
+                        </div>
+                    </div>
+
+                    <div class="entry">
+                        <div class="entry-header">
+                            <h3 class="entry-title">MSc in Architecture</h3>
+                            <span class="entry-date">2009</span>
+                        </div>
+                        <p class="entry-subtitle">University of Coimbra, Portugal</p>
+                    </div>
+
+                    <div class="entry">
+                        <div class="entry-header">
+                            <h3 class="entry-title">BSc in Architectural Arts</h3>
+                            <span class="entry-date">2024 (2009)</span>
+                        </div>
+                        <p class="entry-subtitle">University of Coimbra, Portugal</p>
+                    </div>
+
+                    <div class="entry">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Minor in Mathematics</h3>
+                            <span class="entry-date">2004</span>
+                        </div>
+                        <p class="entry-subtitle">University of Coimbra, Portugal</p>
+                    </div>
+
+                    <div class="entry">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Conservatory Music Diploma - Piano</h3>
+                            <span class="entry-date">2000</span>
+                        </div>
+                        <p class="entry-subtitle">Music Conservatorium of Coimbra, Portugal</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" data-tags="all k12 mathematics data-science geography university">
+                <div class="section-header">
+                    <h2 class="section-title">Teaching Specializations</h2>
+                    <span class="toggle-icon">↓</span>
+                </div>
+                <div class="section-content">
+                    <div class="skills-list">
+                        <span class="skill-item">Mathematics & Statistics</span>
+                        <span class="skill-item">Data Science & R Programming</span>
+                        <span class="skill-item">Geography & Spatial Sciences</span>
+                        <span class="skill-item">Educational Technology</span>
+                        <span class="skill-item">Maker Education</span>
+                        <span class="skill-item">Inquiry-Based Learning</span>
+                        <span class="skill-item">Transdisciplinary Learning</span>
+                        <span class="skill-item">Differentiation</span>
+                        <span class="skill-item">Gifted Education</span>
+                        <span class="skill-item">IB Curriculum</span>
+                        <span class="skill-item">GeoGebra</span>
+                        <span class="skill-item">Spatial Analysis</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" data-tags="all languages">
+                <div class="section-header">
+                    <h2 class="section-title">Languages</h2>
+                    <span class="toggle-icon">↓</span>
+                </div>
+                <div class="section-content">
+                    <div class="skills-list">
+                        <span class="skill-item">English (Native)</span>
+                        <span class="skill-item">Portuguese (Native)</span>
+                        <span class="skill-item">Spanish (C1)</span>
+                        <span class="skill-item">German (B2)</span>
+                        <span class="skill-item">Dutch (B2)</span>
+                        <span class="skill-item">French (B1)</span>
+                        <span class="skill-item">Japanese (A2)</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" data-tags="all university mathematics data-science geography languages">
+                <div class="section-header">
+                    <h2 class="section-title">Higher Education Teaching</h2>
+                    <span class="toggle-icon">↓</span>
+                </div>
+                <div class="section-content">
+                    <div class="entry" data-tags="all university mathematics data-science">
+                        <div class="entry-header">
+                            <h3 class="entry-title">University Instructor – Data Science & Statistics</h3>
+                            <span class="entry-date">2022 - 2025</span>
+                        </div>
+                        <p class="entry-subtitle">University of Amsterdam, The Netherlands</p>
+                        <div class="entry-description">
+                            <ul>
+                                <li>Designed and taught courses in R programming, data science, and research data management</li>
+                                <li>Developed curriculum integrating real-world applications and computational thinking</li>
+                                <li>Supported students across Faculty of Sciences with statistics and programming projects</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all university mathematics geography data-science">
+                        <div class="entry-header">
+                            <h3 class="entry-title">University Instructor – Spatial Analysis & Geography</h3>
+                            <span class="entry-date">2017 - 2022</span>
+                        </div>
+                        <p class="entry-subtitle">Ghent University, Belgium</p>
+                        <div class="entry-description">
+                            <ul>
+                                <li>Taught courses in Spatial Analysis, Spatial Planning, Transport Management, and statistics</li>
+                                <li>Organized spatial analytics, big data, network analysis, and R programming courses</li>
+                                <li>Assisted researchers with data analysis and supported student research projects</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all university languages">
+                        <div class="entry-header">
+                            <h3 class="entry-title">TEFL Instructor</h3>
+                            <span class="entry-date">2008 - 2012</span>
+                        </div>
+                        <p class="entry-subtitle">University of Coimbra, Portugal & Münster, Germany</p>
+                        <div class="entry-description">
+                            Taught English as a second language courses for students pursuing IELTS certification.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" data-tags="all data-science geography">
+                <div class="section-header">
+                    <h2 class="section-title">Professional Experience</h2>
+                    <span class="toggle-icon">↓</span>
+                </div>
+                <div class="section-content">
+                    <div class="entry" data-tags="all data-science">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Coordinating Data Scientist/Manager</h3>
+                            <span class="entry-date">Sep 2022 - May 2025</span>
+                        </div>
+                        <p class="entry-subtitle">Faculty of Science, University of Amsterdam, The Netherlands</p>
+                        <div class="entry-description">
+                            <ul>
+                                <li>Led and managed team of Data Managers; coordinated Data Analytics and Statistics Hub</li>
+                                <li>Worked with institute managers to enhance data management and data science practices faculty-wide</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all data-science geography">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Doctoral/Postdoctoral Researcher</h3>
+                            <span class="entry-date">Jan 2017 - Nov 2022</span>
+                        </div>
+                        <p class="entry-subtitle">Ghent University, Belgium</p>
+                        <div class="entry-description">
+                            <ul>
+                                <li>Conducted research on data-driven tools for transport geography and urban planning (ReVeAL project)</li>
+                                <li>Developed spatial data infrastructure and algorithms for processing complex spatial data</li>
+                                <li>Led Covid-19 epidemiology data science project for Flemish Health Agency</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all data-science geography">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Data Scientist (Freelancer)</h3>
+                            <span class="entry-date">May 2019 - Apr 2023</span>
+                        </div>
+                        <p class="entry-subtitle">Amsterdam, The Netherlands (Remote)</p>
+                        <div class="entry-description">
+                            Conducted spatial analysis, network analysis, and real-time traffic analysis in sustainability, climate change, transportation research, and urban planning domains.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" data-tags="all geography data-science university">
+                <div class="section-header">
+                    <h2 class="section-title">Publications & Research</h2>
+                    <span class="toggle-icon">↓</span>
+                </div>
+                <div class="section-content">
+                    <div class="entry" data-tags="all geography data-science university">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Visualizing the potential for transit-oriented development</h3>
+                            <span class="entry-date">2022</span>
+                        </div>
+                        <p class="entry-subtitle">Environment and Planning B: Urban Analytics and City Science</p>
+                        <div class="entry-description">
+                            Caset, F., Teixeira, F.M., et al. Insights from an open and interactive planning support tool in Flanders, Belgium. <em>Cited by 5</em>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all geography data-science university">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Spatio-temporal dynamics in airport catchment areas</h3>
+                            <span class="entry-date">2021</span>
+                        </div>
+                        <p class="entry-subtitle">Journal of Transport Geography</p>
+                        <div class="entry-description">
+                            Teixeira, F.M., Derudder, B. The case of the New York Multi Airport Region. <em>Cited by 36</em>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all geography data-science university">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Revealing route bias in air transport data</h3>
+                            <span class="entry-date">2020</span>
+                        </div>
+                        <p class="entry-subtitle">Journal of Air Transport Management</p>
+                        <div class="entry-description">
+                            Teixeira, F.M., Derudder, B. The case of the Bureau of Transport Statistics (BTS), Origin-Destination Survey (DB1B). <em>Cited by 10</em>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all geography data-science university">
+                        <div class="entry-header">
+                            <h3 class="entry-title">PhD Dissertation: Developing data-driven tools to minimize data complexity</h3>
+                            <span class="entry-date">2020</span>
+                        </div>
+                        <p class="entry-subtitle">Ghent University</p>
+                        <div class="entry-description">
+                            Research in transport geography with focus on data science methodologies.
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all geography data-science university">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Planning for nodes, places, and people in Flanders and Brussels</h3>
+                            <span class="entry-date">2019</span>
+                        </div>
+                        <p class="entry-subtitle">Journal of Transport and Land Use</p>
+                        <div class="entry-description">
+                            Caset, F., Derudder, B., Witlox, F., Teixeira, F.M., Boussauw, K. <em>Cited by 46</em>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all geography data-science university">
+                        <div class="entry-header">
+                            <h3 class="entry-title">SKYNET: An R package for generating air passenger networks</h3>
+                            <span class="entry-date">2019</span>
+                        </div>
+                        <p class="entry-subtitle">Urban Studies</p>
+                        <div class="entry-description">
+                            Teixeira, F., Derudder, B. An R package for urban studies research. <em>Cited by 15</em>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all data-science university">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Presynaptic CB1 cannabinoid receptors control frontocortical serotonin and glutamate release</h3>
+                            <span class="entry-date">2012</span>
+                        </div>
+                        <p class="entry-subtitle">Neurochemistry International</p>
+                        <div class="entry-description">
+                            Ferreira, S.G., Teixeira, F.M., Garção, P., et al. Species differences in neurotransmitter regulation. <em>Cited by 55</em>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all data-science university">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Presynaptic α2-adrenoceptors control the inhibitory action of CB1 receptors</h3>
+                            <span class="entry-date">2012</span>
+                        </div>
+                        <p class="entry-subtitle">Neuropharmacology</p>
+                        <div class="entry-description">
+                            Richter, H., Teixeira, F.M., Ferreira, S.G., et al. Study on prefrontocortical norepinephrine release in rats. <em>Cited by 26</em>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all" style="margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--border);">
+                        <div class="entry-description">
+                            <a href="https://scholar.google.co.jp/citations?user=4d511sUAAAAJ&hl=en" target="_blank" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent);">
+                                View full publication list on Google Scholar →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            © 2025 · Portuguese National · Based in Yokohama, Japan
+        </footer>
+    </div>
+
+    <script>
+        // Collapsible sections functionality
+        document.querySelectorAll('.section-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const section = this.parentElement;
+                section.classList.toggle('collapsed');
+            });
+        });
+
+        // Start with all sections collapsed
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.add('collapsed');
+        });
+
+        // Filter functionality - now works at entry level
+        const filterTags = document.querySelectorAll('.filter-tag');
+        const sections = document.querySelectorAll('.section');
+
+        filterTags.forEach(tag => {
+            tag.addEventListener('click', function() {
+                // Update active state
+                filterTags.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                const filter = this.getAttribute('data-filter');
+
+                // Filter entries within each section
+                sections.forEach(section => {
+                    const entries = section.querySelectorAll('.entry[data-tags]');
+                    let hasVisibleEntries = false;
+
+                    entries.forEach(entry => {
+                        const tags = entry.getAttribute('data-tags');
+                        
+                        if (filter === 'all' || tags.includes(filter)) {
+                            entry.classList.remove('hidden');
+                            hasVisibleEntries = true;
+                        } else {
+                            entry.classList.add('hidden');
+                        }
+                    });
+
+                    // Hide section if it has no visible entries
+                    if (entries.length > 0) {
+                        if (hasVisibleEntries) {
+                            section.classList.remove('hidden');
+                        } else {
+                            section.classList.add('hidden');
+                        }
+                    } else {
+                        // Keep sections without tagged entries visible (like About)
+                        const sectionTags = section.getAttribute('data-tags');
+                        if (filter === 'all' || (sectionTags && sectionTags.includes(filter))) {
+                            section.classList.remove('hidden');
+                        } else {
+                            section.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
