@@ -1358,15 +1358,13 @@
                 </div>
 
                 <div class="blog-grid">
-                    <a href="blog/article.html?article=ai-transitional-tool" class="blog-card">
+                    <a href="blog/article.html?article=ai-transitional-tool" class="blog-card" data-md="blog/ai-transitional-tool.md">
                         <div class="blog-meta">
-                            <span class="blog-date">March 2026</span>
-                            <span class="blog-category">Education & Technology</span>
+                            <span class="blog-date"></span>
+                            <span class="blog-category"></span>
                         </div>
-                        <h3>Using AI as a Transitional Tool in Education</h3>
-                        <p class="blog-excerpt">
-                            How artificial intelligence can serve as a bridge in learning, not a replacement for deep understanding. Exploring the role of AI tools in fostering independent thinking while supporting the learning process.
-                        </p>
+                        <h3></h3>
+                        <p class="blog-excerpt"></p>
                         <span class="blog-read-more">Read article</span>
                     </a>
 
@@ -1424,6 +1422,43 @@
         // Start with all sections collapsed
         document.querySelectorAll('.section').forEach(section => {
             section.classList.add('collapsed');
+        });
+
+        // Load blog card content from markdown files
+        document.querySelectorAll('.blog-card[data-md]').forEach(card => {
+            fetch(card.getAttribute('data-md'))
+                .then(r => r.text())
+                .then(text => {
+                    // Parse frontmatter
+                    const fm = {};
+                    const fmMatch = text.match(/^---\n([\s\S]*?)\n---/);
+                    if (fmMatch) {
+                        fmMatch[1].split('\n').forEach(line => {
+                            const colon = line.indexOf(':');
+                            if (colon !== -1) {
+                                fm[line.slice(0, colon).trim()] = line.slice(colon + 1).trim();
+                            }
+                        });
+                    }
+
+                    // Extract first real paragraph for excerpt
+                    const body = text
+                        .replace(/^---[\s\S]*?---\n/, '')
+                        .replace(/^#[^\n]*\n+/, '')
+                        .trim();
+                    const firstPara = body.split(/\n\n+/)[0].replace(/[#*_`>]/g, '').trim();
+                    const excerpt = firstPara.length > 180
+                        ? firstPara.slice(0, 180).replace(/\s\S*$/, '') + '…'
+                        : firstPara;
+
+                    if (fm.title) card.querySelector('h3').textContent = fm.title;
+                    if (fm.date)  card.querySelector('.blog-date').textContent = fm.date;
+                    if (fm.category) card.querySelector('.blog-category').textContent = fm.category;
+                    if (excerpt) card.querySelector('.blog-excerpt').textContent = excerpt;
+                })
+                .catch(() => {
+                    card.querySelector('h3').textContent = 'Coming soon…';
+                });
         });
 
         // Filter functionality - now works at entry level and timeline items
