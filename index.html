@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
             --bg: #fafaf8;
@@ -16,7 +17,10 @@
             --text-tertiary: #9a9a9a;
             --accent: #c4a57b;
             --accent-light: #e8dcc8;
+            --accent-dark: #9d8560;
             --border: rgba(0, 0, 0, 0.06);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
 
         * {
@@ -32,6 +36,7 @@
             line-height: 1.7;
             font-weight: 300;
             -webkit-font-smoothing: antialiased;
+            transition: background 0.3s ease;
         }
 
         .container {
@@ -46,6 +51,58 @@
             display: flex;
             align-items: center;
             gap: 40px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0;
+        }
+
+        .tab-button {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95em;
+            font-weight: 400;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            position: relative;
+        }
+
+        .tab-button:hover {
+            color: var(--accent);
+        }
+
+        .tab-button.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
 
         .profile-photo {
@@ -98,6 +155,38 @@
         .contact-item:hover {
             color: var(--accent);
             border-bottom-color: var(--accent);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 40px;
+        }
+
+        .tab-button {
+            font-family: 'Inter', sans-serif;
+            font-size: 1em;
+            font-weight: 400;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            padding: 16px 32px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab-button:hover {
+            color: var(--text-primary);
+            background: rgba(196, 165, 123, 0.05);
+        }
+
+        .tab-button.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            font-weight: 500;
         }
 
         main {
@@ -161,6 +250,322 @@
 
         .entry.hidden {
             display: none;
+        }
+
+        /* Blog Styles */
+        .blog-grid {
+            display: grid;
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .blog-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent);
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            font-size: 0.85em;
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+        }
+
+        .blog-date {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .blog-category {
+            background: var(--accent-light);
+            color: var(--accent-dark);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .blog-card h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.5em;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .blog-excerpt {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .blog-read-more {
+            color: var(--accent);
+            font-weight: 500;
+            font-size: 0.9em;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .blog-read-more::after {
+            content: '→';
+            transition: transform 0.2s ease;
+        }
+
+        .blog-card:hover .blog-read-more::after {
+            transform: translateX(4px);
+        }
+
+        /* Article Page Styles */
+        .article-header {
+            max-width: 720px;
+            margin: 0 auto 48px;
+            text-align: center;
+        }
+
+        .article-title {
+            font-family: 'Lora', serif;
+            font-size: 2.5em;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .article-content {
+            max-width: 720px;
+            margin: 0 auto;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .article-content h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.8em;
+            font-weight: 500;
+            margin-top: 48px;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .article-content h3 {
+            font-family: 'Lora', serif;
+            font-size: 1.4em;
+            font-weight: 500;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .article-content p {
+            margin-bottom: 24px;
+            color: var(--text-secondary);
+        }
+
+        .article-content ul, .article-content ol {
+            margin: 24px 0 24px 24px;
+            color: var(--text-secondary);
+        }
+
+        .article-content li {
+            margin-bottom: 12px;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 24px;
+            margin: 32px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .article-content a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent-light);
+            transition: border-color 0.2s ease;
+        }
+
+        .article-content a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 32px;
+            font-size: 0.95em;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .back-link::before {
+            content: '←';
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 100px 40px;
+        }
+
+        /* Timeline styles */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 80px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent-light), var(--accent));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .timeline-item.hidden {
+            display: none;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-year {
+            position: absolute;
+            left: 0;
+            top: 8px;
+            font-size: 0.85em;
+            color: var(--text-tertiary);
+            font-weight: 400;
+            width: 70px;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timeline-content {
+            margin-left: 100px;
+            position: relative;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -30px;
+            top: 12px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--accent);
+            z-index: 1;
+        }
+
+        .timeline-item.current .timeline-dot {
+            width: 16px;
+            height: 16px;
+            left: -32px;
+            top: 10px;
+            background: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-light);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 4px var(--accent-light);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(196, 165, 123, 0.2);
+            }
+        }
+
+        .timeline-card {
+            padding: 20px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-card:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .timeline-item.current .timeline-card {
+            background: var(--accent-light);
+            border-color: var(--accent);
+        }
+
+        .timeline-title {
+            font-family: 'Lora', serif;
+            font-size: 1.1em;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .timeline-description {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .timeline-tag {
+            display: inline-block;
+            font-size: 0.75em;
+            color: var(--text-secondary);
+            background: var(--bg);
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-right: 6px;
+            margin-top: 4px;
+        }
+
+        .timeline-tags-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .timeline-item.current .timeline-tag {
+            background: white;
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .section:last-of-type {
@@ -326,6 +731,19 @@
                 max-width: 100%;
             }
 
+            .tabs {
+                margin-bottom: 30px;
+                gap: 4px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .tab-button {
+                padding: 10px 16px;
+                font-size: 0.85em;
+                white-space: nowrap;
+            }
+
             header {
                 flex-direction: column;
                 text-align: center;
@@ -375,6 +793,31 @@
                 font-size: 0.8em;
                 padding: 7px 14px;
             }
+
+            /* Timeline mobile adjustments */
+            .timeline::before {
+                left: 10px;
+            }
+
+            .timeline-year {
+                position: static;
+                width: auto;
+                text-align: left;
+                margin-bottom: 8px;
+                font-size: 0.8em;
+            }
+
+            .timeline-content {
+                margin-left: 30px;
+            }
+
+            .timeline-dot {
+                left: -30px;
+            }
+
+            .timeline-item.current .timeline-dot {
+                left: -32px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -402,15 +845,24 @@
         <header>
             <img src="profilepic.jpg" alt="Profile Photo" class="profile-photo">
             <div class="header-content">
-                <h1>Filipe Teixeira</h1>
+                <h1>Filpe Teixeira</h1>
                 <p class="subtitle">International Educator | PhD Geography | Mathematics & Data Science Specialist</p>
                 <div class="contact-info">
-                    <a href="https://linkedin.com/in/filipeamteixeira" class="contact-item" target="_blank">LinkedIn</a>
+                    <a href="https://linkedin.com/in/yourprofile" class="contact-item" target="_blank">LinkedIn</a>
                 </div>
             </div>
         </header>
 
+        <nav class="tabs">
+            <button class="tab-button active" data-tab="cv">CV</button>
+            <button class="tab-button" data-tab="blog">Blog & Resources</button>
+            <button class="tab-button" data-tab="interactive">Interactive</button>
+            <button class="tab-button" data-tab="currently">What I'm Currently...</button>
+        </nav>
+
         <main>
+            <!-- CV Tab -->
+            <div class="tab-content active" id="cv-tab">
             <div class="filter-container">
                 <div class="filter-label">Filter by:</div>
                 <div class="filter-tags">
@@ -431,7 +883,7 @@
                 </div>
                 <div class="section-content">
                     <p class="entry-description">
-                        Experienced international educator with doctoral training in Geography and extensive expertise in mathematics, statistics, and data science. Currently teaching at Yokohama International School with demonstrated experience delivering inquiry-based, student-centered learning in IB and international school environments. Proven ability to differentiate instruction for diverse learners, including gifted students requiring advanced curriculum and behavioral support. Strong background in educational technology, maker education, and transdisciplinary learning. Fluent in seven languages with proven ability to engage learners across grade levels and abilities.
+                        Experienced international educator with doctoral training in Geography and extensive expertise in mathematics, statistics, and data science. Currently teaching at Yokohama International School with demonstrated experience delivering inquiry-based, student-centered learning in IB and international school environments. Proven ability to differentiate instruction for diverse learners, including gifted students requiring advanced curriculum and behavioral support. Strong background in educational technology, maker education, and transdisciplinary learning. Multilingual educator with fluency in four languages and professional working ability in three others. Proven ability to engage learners across grade levels and abilities.
                     </p>
                 </div>
             </section>
@@ -458,7 +910,7 @@
                         </div>
                     </div>
 
-                    <div class="entry" data-tags="all k12 mathematics">
+                    <div class="entry" data-tags="all k12">
                         <div class="entry-header">
                             <h3 class="entry-title">Homeroom Teacher (Grade 3 Substitute)</h3>
                             <span class="entry-date">Jan 2026 - Mar 2026</span>
@@ -473,7 +925,7 @@
                         </div>
                     </div>
 
-                    <div class="entry" data-tags="all k12 mathematics">
+                    <div class="entry" data-tags="all k12">
                         <div class="entry-header">
                             <h3 class="entry-title">Student Teacher (Grade 5)</h3>
                             <span class="entry-date">Aug 2025 - Nov 2025</span>
@@ -488,7 +940,7 @@
                         </div>
                     </div>
 
-                    <div class="entry" data-tags="all k12 mathematics">
+                    <div class="entry" data-tags="all k12">
                         <div class="entry-header">
                             <h3 class="entry-title">Teaching Assistant (Volunteer)</h3>
                             <span class="entry-date">May 2025 - Jun 2025</span>
@@ -502,7 +954,7 @@
                         </div>
                     </div>
 
-                    <div class="entry" data-tags="all k12 mathematics">
+                    <div class="entry" data-tags="all k12">
                         <div class="entry-header">
                             <h3 class="entry-title">Substitute Teacher</h3>
                             <span class="entry-date">2004 - 2011</span>
@@ -554,7 +1006,18 @@
                         <p class="entry-subtitle">SEG, Ghent University, Belgium</p>
                     </div>
 
-                    <div class="entry">
+                    <div class="entry" data-tags="all k12">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Teacher Certification Programme</h3>
+                            <span class="entry-date">2024</span>
+                        </div>
+                        <p class="entry-subtitle">Moreland University, Washington DC, USA</p>
+                        <div class="entry-description">
+                            DC Teaching License
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all data-science">
                         <div class="entry-header">
                             <h3 class="entry-title">MSc in Biochemistry</h3>
                             <span class="entry-date">2011</span>
@@ -576,7 +1039,7 @@
                     <div class="entry">
                         <div class="entry-header">
                             <h3 class="entry-title">BSc in Architectural Arts</h3>
-                            <span class="entry-date">2007</span>
+                            <span class="entry-date">2024 (2009)</span>
                         </div>
                         <p class="entry-subtitle">University of Coimbra, Portugal</p>
                     </div>
@@ -589,7 +1052,7 @@
                         <p class="entry-subtitle">University of Coimbra, Portugal</p>
                     </div>
 
-                    <div class="entry">
+                    <div class="entry" data-tags="all music">
                         <div class="entry-header">
                             <h3 class="entry-title">Conservatory Music Diploma - Piano</h3>
                             <span class="entry-date">2000</span>
@@ -840,14 +1303,116 @@
                     </div>
                 </div>
             </section>
+
+            </div>
+            <!-- End CV Tab -->
+            <!-- End CV Tab -->
+
+
+            <!-- Currently Tab -->
+            <div class="tab-content" id="currently-tab">
+
+            <section class="section" data-tags="all">
+                <div class="section-header">
+                    <h2 class="section-title">What I'm Currently...</h2>
+                    <span class="toggle-icon">↓</span>
+                </div>
+                <div class="section-content">
+                    <div class="entry" data-tags="all">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Reading</h3>
+                        </div>
+                        <div class="entry-description">
+                            Currently exploring: <em>[...]</em>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Learning</h3>
+                        </div>
+                        <div class="entry-description">
+                            Developing skills in: <em>[...]</em>
+                        </div>
+                    </div>
+
+                    <div class="entry" data-tags="all">
+                        <div class="entry-header">
+                            <h3 class="entry-title">Working On</h3>
+                        </div>
+                        <div class="entry-description">
+                            Current projects: <em>[...]</em>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            </div>
+            <!-- End Currently Tab -->
+
+            <!-- Blog Tab -->
+            <div id="blog-tab" class="tab-content">
+                <div style="margin-bottom: 48px;">
+                    <h2 style="font-family: 'Lora', serif; font-size: 2em; color: var(--text-primary); margin-bottom: 12px;">Blog & Teaching Resources</h2>
+                    <p style="color: var(--text-secondary); font-size: 1.05em;">Reflections on education, technology, and the intersection of neuroscience and learning.</p>
+                </div>
+
+                <div class="blog-grid">
+                    <a href="blog/article.html?article=ai-transitional-tool" class="blog-card">
+                        <div class="blog-meta">
+                            <span class="blog-date">March 2026</span>
+                            <span class="blog-category">Education & Technology</span>
+                        </div>
+                        <h3>Using AI as a Transitional Tool in Education</h3>
+                        <p class="blog-excerpt">
+                            How artificial intelligence can serve as a bridge in learning, not a replacement for deep understanding. Exploring the role of AI tools in fostering independent thinking while supporting the learning process.
+                        </p>
+                        <span class="blog-read-more">Read article</span>
+                    </a>
+
+                    <!-- Add more articles here as you write them -->
+                    <div style="text-align: center; padding: 60px 20px; border: 2px dashed var(--border); border-radius: 8px;">
+                        <p style="color: var(--text-tertiary);">More articles coming soon...</p>
+                    </div>
+                </div>
+            </div>
+            <!-- End Blog Tab -->
+
+            <!-- Interactive Tab -->
+            <div id="interactive-tab" class="tab-content">
+                <div style="text-align: center; padding: 100px 40px;">
+                    <h2 style="font-family: 'Lora', serif; font-size: 2em; color: var(--text-primary); margin-bottom: 16px;">Interactive Elements</h2>
+                    <p style="color: var(--text-secondary); font-size: 1.1em; max-width: 600px; margin: 0 auto;">Coming soon! This section will feature interactive demos, educational tools, and data visualizations.</p>
+                </div>
+            </div>
+            <!-- End Interactive Tab -->
+
         </main>
 
         <footer>
-            © 2026 · Filipe Teixeira
+            © 2026 · Filipe Teixeira · Portuguese National · Based in Yokohama, Japan
         </footer>
     </div>
 
     <script>
+        // Tab switching functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetTab = this.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                this.classList.add('active');
+                document.getElementById(targetTab + '-tab').classList.add('active');
+            });
+        });
+
         // Collapsible sections functionality
         document.querySelectorAll('.section-header').forEach(header => {
             header.addEventListener('click', function() {
@@ -861,7 +1426,7 @@
             section.classList.add('collapsed');
         });
 
-        // Filter functionality - now works at entry level
+        // Filter functionality - now works at entry level and timeline items
         const filterTags = document.querySelectorAll('.filter-tag');
         const sections = document.querySelectorAll('.section');
 
@@ -876,8 +1441,10 @@
                 // Filter entries within each section
                 sections.forEach(section => {
                     const entries = section.querySelectorAll('.entry[data-tags]');
+                    const timelineItems = section.querySelectorAll('.timeline-item[data-tags]');
                     let hasVisibleEntries = false;
 
+                    // Filter regular entries
                     entries.forEach(entry => {
                         const tags = entry.getAttribute('data-tags');
                         
@@ -889,8 +1456,20 @@
                         }
                     });
 
+                    // Filter timeline items
+                    timelineItems.forEach(item => {
+                        const tags = item.getAttribute('data-tags');
+                        
+                        if (filter === 'all' || tags.includes(filter)) {
+                            item.classList.remove('hidden');
+                            hasVisibleEntries = true;
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                    });
+
                     // Hide section if it has no visible entries
-                    if (entries.length > 0) {
+                    if (entries.length > 0 || timelineItems.length > 0) {
                         if (hasVisibleEntries) {
                             section.classList.remove('hidden');
                         } else {

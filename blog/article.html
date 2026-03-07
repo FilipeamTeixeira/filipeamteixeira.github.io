@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Article - Your Name</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root {
+            --bg: #fafaf8;
+            --text-primary: #2d2d2d;
+            --text-secondary: #6b6b6b;
+            --text-tertiary: #9a9a9a;
+            --accent: #c4a57b;
+            --accent-light: #e8dcc8;
+            --accent-dark: #9d8560;
+            --border: rgba(0, 0, 0, 0.06);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 80px 40px; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            color: var(--text-secondary); text-decoration: none;
+            margin-bottom: 48px; font-size: 0.95em;
+        }
+        .back-link:hover { color: var(--accent); }
+        .back-link::before { content: '←'; }
+        .article-header { margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+        .article-meta { display: flex; gap: 16px; font-size: 0.9em; color: var(--text-tertiary); margin-bottom: 24px; }
+        .article-category { background: var(--accent-light); color: var(--accent-dark); padding: 4px 12px; border-radius: 12px; font-weight: 500; }
+        #article-content { font-size: 1.05em; line-height: 1.8; }
+        #article-content h1 { font-family: 'Lora', serif; font-size: 2.5em; font-weight: 500; margin-bottom: 16px; line-height: 1.2; }
+        #article-content h2 { font-family: 'Lora', serif; font-size: 1.8em; font-weight: 500; margin-top: 48px; margin-bottom: 24px; }
+        #article-content h3 { font-family: 'Lora', serif; font-size: 1.4em; font-weight: 500; margin-top: 32px; margin-bottom: 16px; }
+        #article-content p { margin-bottom: 24px; color: var(--text-secondary); }
+        #article-content ul, #article-content ol { margin: 24px 0 24px 24px; color: var(--text-secondary); }
+        #article-content li { margin-bottom: 12px; }
+        #article-content blockquote {
+            border-left: 4px solid var(--accent); padding: 24px;
+            margin: 32px 0; font-style: italic;
+            background: var(--accent-light); border-radius: 4px;
+        }
+        #article-content a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-light); }
+        #article-content a:hover { border-bottom-color: var(--accent); }
+        #article-content strong { font-weight: 500; color: var(--text-primary); }
+        footer { margin-top: 80px; padding-top: 32px; border-top: 1px solid var(--border); text-align: center; font-size: 0.85em; color: var(--text-tertiary); }
+        @media (max-width: 768px) {
+            .container { padding: 60px 24px; }
+            #article-content h1 { font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html#blog" class="back-link">Back to Blog</a>
+        <article>
+            <div id="article-content">Loading...</div>
+        </article>
+        <footer>
+            <p>© 2025 · <a href="../index.html" style="color: var(--accent); text-decoration: none;">Back to Homepage</a></p>
+        </footer>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleFile = urlParams.get('article');
+        if (articleFile) {
+            fetch(`${articleFile}.md`)
+                .then(r => r.text())
+                .then(md => {
+                    const match = md.match(/^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/);
+                    let meta = {}, content = md;
+                    if (match) {
+                        match[1].split('\n').forEach(line => {
+                            const [k, ...v] = line.split(':');
+                            if (k && v.length) meta[k.trim()] = v.join(':').trim();
+                        });
+                        content = match[2];
+                    }
+                    if (meta.title) document.getElementById('page-title').textContent = meta.title;
+                    let html = '';
+                    if (meta.date || meta.category) {
+                        html += '<header class="article-header"><div class="article-meta">';
+                        if (meta.date) html += `<span>${meta.date}</span>`;
+                        if (meta.category) html += `<span class="article-category">${meta.category}</span>`;
+                        if (meta.readtime) html += `<span>${meta.readtime}</span>`;
+                        html += '</div></header>';
+                    }
+                    html += marked.parse(content);
+                    document.getElementById('article-content').innerHTML = html;
+                })
+                .catch(e => {
+                    document.getElementById('article-content').innerHTML = '<p>Article not found.</p>';
+                });
+        }
+    </script>
+</body>
+</html>
