@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filipe Teixeira - CV</title>
+    <title>Your Name - CV</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
@@ -840,23 +840,12 @@
         }
     </style>
 </head>
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KBSTZZDPJ7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-KBSTZZDPJ7');
-</script>
-
 <body>
     <div class="container">
         <header>
             <img src="profilepic.jpg" alt="Profile Photo" class="profile-photo">
             <div class="header-content">
-                <h1>Filpe Teixeira</h1>
+                <h1>Your Name</h1>
                 <p class="subtitle">International Educator | PhD Geography | Mathematics & Data Science Specialist</p>
                 <div class="contact-info">
                     <a href="https://linkedin.com/in/yourprofile" class="contact-item" target="_blank">LinkedIn</a>
@@ -1050,7 +1039,7 @@
                     <div class="entry">
                         <div class="entry-header">
                             <h3 class="entry-title">BSc in Architectural Arts</h3>
-                            <span class="entry-date">(2009, awarded 2024)</span>
+                            <span class="entry-date">2024 (2009)</span>
                         </div>
                         <p class="entry-subtitle">University of Coimbra, Portugal</p>
                     </div>
@@ -1334,7 +1323,7 @@
                             <h3 class="entry-title">Reading</h3>
                         </div>
                         <div class="entry-description">
-                            Currently exploring: <em>[...]</em>
+                            Currently exploring: <em>[Book title or topic - update this with what you're reading]</em>
                         </div>
                     </div>
 
@@ -1343,7 +1332,7 @@
                             <h3 class="entry-title">Learning</h3>
                         </div>
                         <div class="entry-description">
-                            Developing skills in: <em>[...]</em>
+                            Developing skills in: <em>[New skill or area - e.g., "Advanced IB Mathematics curriculum design" or "Japanese language proficiency"]</em>
                         </div>
                     </div>
 
@@ -1352,7 +1341,7 @@
                             <h3 class="entry-title">Working On</h3>
                         </div>
                         <div class="entry-description">
-                            Current projects: <em>[...]</em>
+                            Current projects: <em>[Teaching project, research, or curriculum development - e.g., "Developing maker education curriculum integrating mathematics and spatial thinking"]</em>
                         </div>
                     </div>
                 </div>
@@ -1369,13 +1358,15 @@
                 </div>
 
                 <div class="blog-grid">
-                    <a href="blog/article.html?article=ai-transitional-tool" class="blog-card" data-md="blog/ai-transitional-tool.md">
+                    <a href="blog/article.html?article=ai-transitional-tool" class="blog-card">
                         <div class="blog-meta">
-                            <span class="blog-date"></span>
-                            <span class="blog-category"></span>
+                            <span class="blog-date">March 2026</span>
+                            <span class="blog-category">Education & Technology</span>
                         </div>
-                        <h3></h3>
-                        <p class="blog-excerpt"></p>
+                        <h3>Using AI as a Transitional Tool in Education</h3>
+                        <p class="blog-excerpt">
+                            How artificial intelligence can serve as a bridge in learning, not a replacement for deep understanding. Exploring the role of AI tools in fostering independent thinking while supporting the learning process.
+                        </p>
                         <span class="blog-read-more">Read article</span>
                     </a>
 
@@ -1433,43 +1424,6 @@
         // Start with all sections collapsed
         document.querySelectorAll('.section').forEach(section => {
             section.classList.add('collapsed');
-        });
-
-        // Load blog card content from markdown files
-        document.querySelectorAll('.blog-card[data-md]').forEach(card => {
-            fetch(card.getAttribute('data-md'))
-                .then(r => r.text())
-                .then(text => {
-                    // Parse frontmatter
-                    const fm = {};
-                    const fmMatch = text.match(/^---\n([\s\S]*?)\n---/);
-                    if (fmMatch) {
-                        fmMatch[1].split('\n').forEach(line => {
-                            const colon = line.indexOf(':');
-                            if (colon !== -1) {
-                                fm[line.slice(0, colon).trim()] = line.slice(colon + 1).trim();
-                            }
-                        });
-                    }
-
-                    // Extract first real paragraph for excerpt
-                    const body = text
-                        .replace(/^---[\s\S]*?---\n/, '')
-                        .replace(/^#[^\n]*\n+/, '')
-                        .trim();
-                    const firstPara = body.split(/\n\n+/)[0].replace(/[#*_`>]/g, '').trim();
-                    const excerpt = firstPara.length > 180
-                        ? firstPara.slice(0, 180).replace(/\s\S*$/, '') + '…'
-                        : firstPara;
-
-                    if (fm.title) card.querySelector('h3').textContent = fm.title;
-                    if (fm.date)  card.querySelector('.blog-date').textContent = fm.date;
-                    if (fm.category) card.querySelector('.blog-category').textContent = fm.category;
-                    if (excerpt) card.querySelector('.blog-excerpt').textContent = excerpt;
-                })
-                .catch(() => {
-                    card.querySelector('h3').textContent = 'Coming soon…';
-                });
         });
 
         // Filter functionality - now works at entry level and timeline items
