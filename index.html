@@ -1357,23 +1357,8 @@
                     <p style="color: var(--text-secondary); font-size: 1.05em;">Reflections on education, technology, and the intersection of neuroscience and learning.</p>
                 </div>
 
-                <div class="blog-grid">
-                    <a href="blog/article.html?article=ai-transitional-tool" class="blog-card">
-                        <div class="blog-meta">
-                            <span class="blog-date">March 2026</span>
-                            <span class="blog-category">Education & Technology</span>
-                        </div>
-                        <h3>Using AI as a Transitional Tool in Education</h3>
-                        <p class="blog-excerpt">
-                            How artificial intelligence can serve as a bridge in learning, not a replacement for deep understanding. Exploring the role of AI tools in fostering independent thinking while supporting the learning process.
-                        </p>
-                        <span class="blog-read-more">Read article</span>
-                    </a>
-
-                    <!-- Add more articles here as you write them -->
-                    <div style="text-align: center; padding: 60px 20px; border: 2px dashed var(--border); border-radius: 8px;">
-                        <p style="color: var(--text-tertiary);">More articles coming soon...</p>
-                    </div>
+                <div class="blog-grid" id="blog-list">
+                    <!-- Blog cards will be generated here by JavaScript -->
                 </div>
             </div>
             <!-- End Blog Tab -->
@@ -1395,6 +1380,63 @@
     </div>
 
     <script>
+        // ============================================
+        // BLOG ARTICLES - ADD NEW ARTICLES HERE
+        // ============================================
+        const blogArticles = [
+            {
+                filename: 'ai-transitional-tool',
+                title: 'Copy & Paste: Generative AI in the Classroom and the Elephant in the Room',
+                date: 'March 2026',
+                category: 'Education & Technology',
+                excerpt: 'Available soon...'
+            },
+            // Add more articles here following the same format:
+            // {
+            //     filename: 'your-article-filename',  // without .md extension
+            //     title: 'Your Article Title',
+            //     date: 'Month Year',
+            //     category: 'Category Name',
+            //     excerpt: 'Brief description of your article.'
+            // },
+        ];
+
+        // Generate blog cards
+        function generateBlogCards() {
+            const blogList = document.getElementById('blog-list');
+            if (!blogList) return;
+
+            blogArticles.forEach(article => {
+                const card = document.createElement('a');
+                card.href = `blog/article.html?article=${article.filename}`;
+                card.className = 'blog-card';
+                
+                card.innerHTML = `
+                    <div class="blog-meta">
+                        <span class="blog-date">${article.date}</span>
+                        <span class="blog-category">${article.category}</span>
+                    </div>
+                    <h3>${article.title}</h3>
+                    <p class="blog-excerpt">${article.excerpt}</p>
+                    <span class="blog-read-more">Read article</span>
+                `;
+                
+                blogList.appendChild(card);
+            });
+
+            // Add "coming soon" placeholder
+            const placeholder = document.createElement('div');
+            placeholder.style.cssText = 'text-align: center; padding: 60px 20px; border: 2px dashed var(--border); border-radius: 8px;';
+            placeholder.innerHTML = '<p style="color: var(--text-tertiary);">More articles coming soon...</p>';
+            blogList.appendChild(placeholder);
+        }
+
+        // Run on page load
+        generateBlogCards();
+
+        // ============================================
+        // TAB SWITCHING
+        // ============================================
         // Tab switching functionality
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
@@ -1413,6 +1455,9 @@
             });
         });
 
+        // ============================================
+        // COLLAPSIBLE SECTIONS
+        // ============================================
         // Collapsible sections functionality
         document.querySelectorAll('.section-header').forEach(header => {
             header.addEventListener('click', function() {
@@ -1426,6 +1471,9 @@
             section.classList.add('collapsed');
         });
 
+        // ============================================
+        // FILTER FUNCTIONALITY
+        // ============================================
         // Filter functionality - now works at entry level and timeline items
         const filterTags = document.querySelectorAll('.filter-tag');
         const sections = document.querySelectorAll('.section');
