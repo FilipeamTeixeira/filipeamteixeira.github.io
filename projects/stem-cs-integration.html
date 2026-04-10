@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STEM & CS Integration — Filipe Teixeira</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fafaf8;
+  --bg-card: #f4f3ef;
+  --text-primary: #2d2d2d;
+  --text-secondary: #5a5a5a;
+  --text-tertiary: #9a9a9a;
+  --accent: #c4a57b;
+  --accent-light: #ede5d6;
+  --accent-dark: #9d8560;
+  --border: rgba(0,0,0,0.07);
+  --max: 920px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-weight: 300;
+  font-size: 15px;
+}
+
+/* ── NAV (identical to index.html) ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,250,248,0.92);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: var(--max); margin: 0 auto; padding: 0 24px;
+  height: 56px; display: flex; align-items: center; justify-content: space-between;
+}
+.nav-name {
+  font-family: 'Lora', serif; font-size: 1em; font-weight: 500;
+  color: var(--text-primary); text-decoration: none; letter-spacing: -0.01em;
+}
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  color: var(--text-secondary); text-decoration: none;
+  font-size: 0.88em; letter-spacing: 0.02em; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent); }
+
+/* ── LAYOUT ── */
+.container { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+/* ── BACK LINK ── */
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--text-tertiary); text-decoration: none; font-size: 0.85em;
+  padding: 24px 0 0; transition: color 0.2s;
+}
+.back-link:hover { color: var(--accent); }
+
+/* ── PAGE HEADER ── */
+.page-header {
+  padding: 32px 0 40px;
+  border-bottom: 1px solid var(--border);
+}
+.page-eyebrow {
+  font-size: 0.75em; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 14px;
+}
+.page-header h1 {
+  font-family: 'Lora', serif;
+  font-size: clamp(1.9em, 4vw, 2.6em);
+  font-weight: 500; line-height: 1.18; letter-spacing: -0.02em;
+  color: var(--text-primary); margin-bottom: 14px;
+}
+.page-header .subtitle {
+  font-size: 1em; color: var(--text-secondary);
+  max-width: 600px; line-height: 1.65; margin-bottom: 28px;
+}
+.meta-row { display: flex; gap: 32px; flex-wrap: wrap; }
+.meta-item { display: flex; flex-direction: column; gap: 2px; }
+.meta-label {
+  font-size: 0.7em; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.meta-value { font-size: 0.88em; color: var(--text-secondary); }
+
+/* ── TABS ── */
+.tab-bar {
+  display: flex; gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-top: 40px;
+}
+.tab-btn {
+  padding: 12px 20px;
+  border: none; background: transparent;
+  font-family: 'Inter', sans-serif; font-size: 0.88em; font-weight: 400;
+  color: var(--text-tertiary); cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: all 0.18s; letter-spacing: 0.01em;
+}
+.tab-btn:hover { color: var(--text-secondary); }
+.tab-btn.active { color: var(--accent-dark); border-bottom-color: var(--accent); font-weight: 500; }
+
+/* ── TAB PANELS ── */
+.tab-panel { display: none; padding: 48px 0 80px; }
+.tab-panel.active { display: block; }
+
+/* ── SHARED CONTENT STYLES ── */
+.section-label {
+  font-size: 0.75em; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
+}
+.section-title {
+  font-family: 'Lora', serif; font-size: 1.6em; font-weight: 500;
+  color: var(--text-primary); margin-bottom: 32px; letter-spacing: -0.01em;
+}
+
+/* ── OVERVIEW TAB ── */
+.intro-text {
+  color: var(--text-secondary); line-height: 1.8; max-width: 680px;
+}
+.intro-text p + p { margin-top: 14px; }
+.intro-text p:first-child { font-size: 1.06em; color: var(--text-primary); }
+
+.aims-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+  margin: 40px 0;
+}
+.aim-cell { background: var(--bg); padding: 20px 22px; }
+.aim-num {
+  font-size: 0.7em; letter-spacing: 0.08em; color: var(--text-tertiary);
+  margin-bottom: 8px;
+}
+.aim-cell p { font-size: 0.88em; color: var(--text-secondary); line-height: 1.6; }
+
+.timeline { margin: 0; }
+.phase-row {
+  display: grid; grid-template-columns: 160px 1fr;
+  gap: 24px; padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+}
+.phase-row:first-child { border-top: 1px solid var(--border); }
+.phase-left { padding-top: 2px; }
+.phase-dot {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  margin-right: 5px; vertical-align: middle; margin-top: -1px;
+}
+.phase-num-label {
+  font-size: 0.72em; letter-spacing: 0.07em; text-transform: uppercase;
+  color: var(--text-tertiary); margin-bottom: 4px;
+}
+.phase-period { font-size: 0.82em; color: var(--text-secondary); font-style: italic; }
+.phase-title { font-weight: 500; font-size: 0.95em; margin-bottom: 8px; color: var(--text-primary); }
+.phase-list { list-style: none; padding: 0; }
+.phase-list li {
+  font-size: 0.87em; color: var(--text-secondary);
+  padding: 3px 0 3px 14px; position: relative;
+}
+.phase-list li::before { content: '–'; position: absolute; left: 0; color: var(--accent); }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+.chip {
+  font-size: 0.72em; font-weight: 500; padding: 2px 10px;
+  border-radius: 20px; border: 1px solid;
+}
+
+.outcome-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px;
+}
+.outcome-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 18px 20px;
+}
+.outcome-level {
+  font-size: 0.7em; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
+}
+.outcome-card ul { list-style: none; padding: 0; }
+.outcome-card li {
+  font-size: 0.87em; color: var(--text-secondary); padding: 3px 0 3px 14px; position: relative;
+}
+.outcome-card li::before { content: '→'; position: absolute; left: 0; font-size: 0.8em; color: var(--text-tertiary); }
+
+.skills-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.skill-tag {
+  font-size: 0.78em; padding: 4px 12px; border-radius: 20px;
+  background: var(--accent-light); color: var(--accent-dark);
+}
+
+/* ── DOCUMENT TABS (Proposal + Framework) ── */
+.doc-content h2 {
+  font-family: 'Lora', serif; font-size: 1.4em; font-weight: 500;
+  color: var(--text-primary); margin: 40px 0 14px; letter-spacing: -0.01em;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+.doc-content h2:first-child { margin-top: 0; }
+.doc-content h3 {
+  font-size: 0.95em; font-weight: 500; color: var(--text-primary);
+  margin: 24px 0 10px; text-transform: none; letter-spacing: 0;
+}
+.doc-content p {
+  font-size: 0.9em; color: var(--text-secondary); line-height: 1.75;
+  margin-bottom: 12px; max-width: 760px;
+}
+.doc-content ul, .doc-content ol {
+  padding-left: 0; list-style: none; margin-bottom: 14px;
+}
+.doc-content ul li, .doc-content ol li {
+  font-size: 0.88em; color: var(--text-secondary);
+  padding: 3px 0 3px 18px; position: relative; line-height: 1.65;
+}
+.doc-content ul li::before { content: '–'; position: absolute; left: 0; color: var(--accent); }
+.doc-content ol { counter-reset: doc-ol; }
+.doc-content ol li::before {
+  content: counter(doc-ol) "."; counter-increment: doc-ol;
+  position: absolute; left: 0; font-size: 0.85em;
+  color: var(--accent); font-weight: 500;
+}
+
+/* ── DOC TABLES ── */
+.doc-table-wrap { overflow-x: auto; margin: 20px 0 28px; }
+.doc-table {
+  width: 100%; border-collapse: collapse; font-size: 0.85em;
+  min-width: 500px;
+}
+.doc-table th {
+  background: var(--bg-card); text-align: left;
+  padding: 10px 14px; font-weight: 500; font-size: 0.82em;
+  letter-spacing: 0.04em; color: var(--text-secondary);
+  border-bottom: 2px solid var(--border);
+}
+.doc-table td {
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  color: var(--text-secondary); vertical-align: top;
+}
+.doc-table tr:last-child td { border-bottom: none; }
+.doc-table tr:nth-child(even) td { background: rgba(0,0,0,0.015); }
+.doc-table td:first-child { font-weight: 500; color: var(--text-primary); white-space: nowrap; }
+
+/* phase accent colors */
+.c1 { color: #1E5A9C; border-color: #B8D0EC; background: #EEF5FB; }
+.c2 { color: #2B7A6F; border-color: #A8D5CF; background: #EDF7F5; }
+.c3 { color: #7A4E2B; border-color: #D4B89A; background: #F9F0E8; }
+.c4 { color: #5A2B7A; border-color: #C4A8D4; background: #F5EDF9; }
+
+.callout {
+  background: var(--accent-light); border-left: 3px solid var(--accent);
+  padding: 14px 18px; border-radius: 0 6px 6px 0;
+  margin: 20px 0;
+}
+.callout p { font-size: 0.88em; color: var(--accent-dark); margin: 0; font-style: italic; }
+
+/* ── FOOTER ── */
+footer { padding: 40px 0; text-align: center; border-top: 1px solid var(--border); }
+.footer-inner { font-size: 0.82em; color: var(--text-tertiary); }
+.footer-inner a { color: var(--accent); text-decoration: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .container { padding: 0 16px; }
+  .nav-inner { padding: 0 16px; }
+  .nav-links { gap: 16px; }
+  .nav-links li:nth-child(n+4) { display: none; }
+  .phase-row { grid-template-columns: 1fr; gap: 6px; }
+  .outcome-grid { grid-template-columns: 1fr; }
+  .tab-btn { padding: 10px 12px; font-size: 0.82em; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-name">Filipe Teixeira</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#experience">Experience</a></li>
+      <li><a href="../index.html#research">Research</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#blog">Writing</a></li>
+      <li><a href="https://www.linkedin.com/in/filipeamteixeira/" target="_blank">LinkedIn ↗</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  <a href="../index.html#projects" class="back-link">← Back to Projects</a>
+
+  <div class="page-header">
+    <p class="page-eyebrow">Curriculum Design · IB Continuum · K–12</p>
+    <h1>STEM & Computer Science<br>Integration Plan</h1>
+    <p class="subtitle">A phased initiative to embed computational thinking and scientific inquiry across the primary, middle school, and diploma programmes of an IB international school.</p>
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-label">Scope</span>
+        <span class="meta-value">PYP → MYP → DP</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Duration</span>
+        <span class="meta-value">18-month pilot, 3-year rollout</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Role</span>
+        <span class="meta-value">Lead designer & coordinator</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Context</span>
+        <span class="meta-value">IB International School</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="proposal">Project Proposal</button>
+    <button class="tab-btn" data-tab="framework">Curriculum Framework</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ OVERVIEW TAB -->
+<div class="container">
+<div id="tab-overview" class="tab-panel active">
+
+  <div class="intro-text">
+    <p>This project designed and proposed a cohesive STEM and Computer Science continuum for an IB international school — from early years through to Diploma level. It addressed fragmented provision, an underused Maker Space, and the absence of a clear computational thinking progression across programmes.</p>
+    <p>The work spans curriculum audit, vertical alignment mapping, an upper-secondary CS pathway, teacher professional development, and Maker Space integration — all grounded in inquiry-based science and a cyclical learning model (Experience → Reflection → Return).</p>
+  </div>
+
+  <div style="margin-top:48px">
+    <p class="section-label">Core aims</p>
+    <div class="aims-grid">
+      <div class="aim-cell"><div class="aim-num">01</div><p>Design an upper-secondary CS pathway for both IB DP and local diploma students.</p></div>
+      <div class="aim-cell"><div class="aim-num">02</div><p>Embed computational thinking progressively across all programme levels.</p></div>
+      <div class="aim-cell"><div class="aim-num">03</div><p>Revitalise the Maker Space as a cross-programme hub for hands-on inquiry.</p></div>
+      <div class="aim-cell"><div class="aim-num">04</div><p>Build teacher capacity through co-teaching, modelling, and micro-PD sessions.</p></div>
+      <div class="aim-cell"><div class="aim-num">05</div><p>Ensure sustainability through reflection cycles and internal leadership development.</p></div>
+      <div class="aim-cell"><div class="aim-num">06</div><p>Keep student needs and wellbeing at the centre of every design decision.</p></div>
+    </div>
+  </div>
+
+  <div style="margin-top:48px">
+    <p class="section-label">Implementation phases</p>
+    <div class="timeline">
+      <div class="phase-row">
+        <div class="phase-left">
+          <div class="phase-num-label"><span class="phase-dot" style="background:#1E5A9C"></span>Phase 1</div>
+          <div class="phase-period">Jan – Mar, Year 1</div>
+        </div>
+        <div>
+          <div class="phase-title">Foundation and Planning</div>
+          <ul class="phase-list">
+            <li>Full curriculum audit across all programme levels</li>
+            <li>Map upper-secondary CS options (IB DP CS & local diploma)</li>
+            <li>Consult leadership and coordinators to define scope</li>
+            <li>Identify Maker Space priorities and baseline resources</li>
+          </ul>
+          <div class="chips">
+            <span class="chip c1">Audit report</span>
+            <span class="chip c1">CS/STEM strategy</span>
+            <span class="chip c1">Maker Space plan</span>
+          </div>
+        </div>
+      </div>
+      <div class="phase-row">
+        <div class="phase-left">
+          <div class="phase-num-label"><span class="phase-dot" style="background:#2B7A6F"></span>Phase 2</div>
+          <div class="phase-period">Apr – Jul, Year 1</div>
+        </div>
+        <div>
+          <div class="phase-title">Primary Level Pilot</div>
+          <ul class="phase-list">
+            <li>Co-design 4–6 primary STEM inquiry units with grade-level teams</li>
+            <li>Co-teach and provide classroom support during integration</li>
+            <li>Deliver 2 teacher PD workshops (computational thinking, inquiry STEM)</li>
+            <li>Introduce cyclical learning model</li>
+          </ul>
+          <div class="chips">
+            <span class="chip c2">Pilot unit portfolio</span>
+            <span class="chip c2">PD materials</span>
+            <span class="chip c2">Teacher reflections</span>
+          </div>
+        </div>
+      </div>
+      <div class="phase-row">
+        <div class="phase-left">
+          <div class="phase-num-label"><span class="phase-dot" style="background:#7A4E2B"></span>Phase 3</div>
+          <div class="phase-period">Aug – Nov, Year 1</div>
+        </div>
+        <div>
+          <div class="phase-title">MYP and Upper-Secondary Preparation</div>
+          <ul class="phase-list">
+            <li>Develop full upper-secondary CS curriculum aligned to IB DP requirements</li>
+            <li>Align MYP strands to ensure PYP → DP conceptual progression</li>
+            <li>Prepare documentation for IB course authorisation</li>
+          </ul>
+          <div class="chips">
+            <span class="chip c3">DP CS syllabus draft</span>
+            <span class="chip c3">MYP progression map</span>
+            <span class="chip c3">Authorisation draft</span>
+          </div>
+        </div>
+      </div>
+      <div class="phase-row">
+        <div class="phase-left">
+          <div class="phase-num-label"><span class="phase-dot" style="background:#5A2B7A"></span>Phase 4</div>
+          <div class="phase-period">Dec Yr1 – Jun Yr2</div>
+        </div>
+        <div>
+          <div class="phase-title">Launch and Evaluation</div>
+          <ul class="phase-list">
+            <li>Launch interdisciplinary Maker Space projects across PYP–MYP</li>
+            <li>Pilot upper-secondary CS modules as enrichment/electives</li>
+            <li>Review integration outcomes; present interim report to senior leadership</li>
+          </ul>
+          <div class="chips">
+            <span class="chip c4">Evaluation report</span>
+            <span class="chip c4">Updated resource plan</span>
+          </div>
+        </div>
+      </div>
+      <div class="phase-row">
+        <div class="phase-left">
+          <div class="phase-num-label"><span class="phase-dot" style="background:#1E5A9C"></span>Phase 5</div>
+          <div class="phase-period">Aug Yr2 – Jun Yr3</div>
+        </div>
+        <div>
+          <div class="phase-title">Full Upper-Secondary Launch</div>
+          <ul class="phase-list">
+            <li>Officially launch upper-secondary CS pathway (IB DP and/or local diploma)</li>
+            <li>Establish university and STEM organisation partnerships</li>
+            <li>Integrate pilot findings into ongoing PYP/MYP STEM development</li>
+          </ul>
+          <div class="chips">
+            <span class="chip c1">CS pathway live</span>
+            <span class="chip c1">Annual SLT report</span>
+            <span class="chip c1">Sustainability plan</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:48px">
+    <p class="section-label">Expected outcomes by level</p>
+    <div class="outcome-grid">
+      <div class="outcome-card">
+        <div class="outcome-level">Primary (PYP)</div>
+        <ul>
+          <li>4–6 co-designed science-centred inquiry units</li>
+          <li>Cyclical mini-science cycles embedded each term</li>
+          <li>Digital portfolios evidencing inquiry process</li>
+        </ul>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-level">Middle School (MYP)</div>
+        <ul>
+          <li>Computational thinking articulated across all year levels</li>
+          <li>Project templates linking Design and Science</li>
+          <li>Vertical alignment map to DP outcomes</li>
+        </ul>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-level">Upper Secondary (DP)</div>
+        <ul>
+          <li>IB DP Computer Science pathway implemented</li>
+          <li>Interdisciplinary projects linking CS with sciences</li>
+          <li>IA guidance grounded in scientific data and real-world applications</li>
+        </ul>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-level">Whole School</div>
+        <ul>
+          <li>Annual STEM Showcase across all year levels</li>
+          <li>Shared digital resource hub for units and project templates</li>
+          <li>Sustained teacher capacity through mentoring and micro-PD</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:48px">
+    <p class="section-label">Skills and areas</p>
+    <div class="skills-list">
+      <span class="skill-tag">IB Curriculum Design</span>
+      <span class="skill-tag">K–12 STEM Integration</span>
+      <span class="skill-tag">Computer Science Education</span>
+      <span class="skill-tag">Computational Thinking</span>
+      <span class="skill-tag">Maker Education</span>
+      <span class="skill-tag">Teacher Professional Development</span>
+      <span class="skill-tag">Learning Design</span>
+      <span class="skill-tag">Vertical Alignment</span>
+      <span class="skill-tag">Assessment Design</span>
+      <span class="skill-tag">Programme Leadership</span>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ PROPOSAL TAB -->
+<div class="container">
+<div id="tab-proposal" class="tab-panel">
+<div class="doc-content">
+
+  <h2>1. Executive Summary</h2>
+  <p>This proposal outlines a phased plan to design and implement a cohesive Computer Science (CS) and STEM learning continuum across the primary, middle, and diploma programmes of an international school operating within an IB framework. It addresses identified gaps in current STEM integration and provides a clear pathway for developing computational thinking from the early years through to pre-university level.</p>
+  <p><strong style="font-weight:500;color:var(--text-primary)">The initiative aims to:</strong></p>
+  <ul>
+    <li>Design and implement an upper-secondary Computer Science pathway serving both IB Diploma and local diploma students, ensuring meaningful choices aligned with student interests and future pathways.</li>
+    <li>Embed STEM inquiry and computational thinking progressively across primary and middle school programmes.</li>
+    <li>Strengthen Maker Space integration as a cross-programme hub for hands-on learning.</li>
+    <li>Build teacher capacity through sustained co-teaching, mentoring, and professional learning.</li>
+    <li>Ensure long-term sustainability through reflection cycles, community engagement, and internal leadership development.</li>
+    <li>Keep student needs, interests, and wellbeing as the central purpose of the initiative at every stage.</li>
+  </ul>
+  <p>This plan is cost-effective and scalable, maximising internal resources while positioning the school as a regional leader in integrated STEM education.</p>
+
+  <h2>2. Vision and Rationale</h2>
+  <h3>2.1 Vision</h3>
+  <p>To establish the school as a model for integrated STEM and Computer Science education within the IB framework, where inquiry, creativity, and problem-solving are cultivated from the early years to the diploma level, with student growth, curiosity, and empowerment as the core drivers.</p>
+  <h3>2.2 Rationale</h3>
+  <ul>
+    <li>Teacher feedback indicates a need for greater confidence, structured support, and dedicated time to deliver effective STEM-based inquiry.</li>
+    <li>Middle and diploma students lack a clear progression path in computational and design thinking.</li>
+    <li>The Maker Space remains underutilised due to limited staffing, training, and curricular integration.</li>
+    <li>The IB Computer Science DP option has high demand internationally, improving student outcomes and university prospects.</li>
+    <li>A coordinated CS/STEM framework supports the school's strategic vision of innovation, inquiry, and interdisciplinarity.</li>
+  </ul>
+
+  <h2>3. Objectives</h2>
+  <ol>
+    <li>Design and implement a flexible upper-secondary Computer Science pathway serving both IB DP and local diploma students.</li>
+    <li>Integrate STEM and computational thinking progressively across primary and middle school, ensuring conceptual and skill continuity.</li>
+    <li>Build teacher capacity through co-teaching, modelling, and professional learning that supports inquiry-driven STEM integration.</li>
+    <li>Coordinate and revitalise the Maker Space as a cross-programme hub for design, technology, and inquiry.</li>
+    <li>Establish partnerships with local and international universities, STEM organisations, and technology communities.</li>
+    <li>Develop evaluation and resource systems, including measurable STEM learning indicators and a shared digital resource hub.</li>
+    <li>Embed a cyclical learning model that ensures key scientific and computational concepts are revisited and deepened over time.</li>
+  </ol>
+
+  <h2>4. Action Plan and Timeline</h2>
+  <p>The project progresses through five interconnected phases. Each phase builds upon the previous one to ensure coherence, reflection, and iterative improvement.</p>
+  <div class="doc-table-wrap">
+    <table class="doc-table">
+      <thead><tr><th>Phase</th><th>Period</th><th>Key Actions</th><th>Deliverables</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Phase 1: Foundation and Planning</td>
+          <td>Jan–Mar, Year 1</td>
+          <td>Curriculum audit; map upper-secondary CS options; consult leadership; identify baseline resources</td>
+          <td>Audit report; CS/STEM strategy document; Maker Space plan</td>
+        </tr>
+        <tr>
+          <td>Phase 2: Primary Level Pilot</td>
+          <td>Apr–Jul, Year 1</td>
+          <td>Co-design 4–6 inquiry units; co-teach; deliver 2 PD workshops; introduce cyclical learning model</td>
+          <td>Pilot unit portfolio; PD materials; teacher reflection summary</td>
+        </tr>
+        <tr>
+          <td>Phase 3: MYP and Upper-Secondary Preparation</td>
+          <td>Aug–Nov, Year 1</td>
+          <td>Develop full upper-secondary CS curriculum; align MYP strands; prepare IB authorisation documentation</td>
+          <td>Draft DP CS syllabus; MYP progression map; internal submission draft</td>
+        </tr>
+        <tr>
+          <td>Phase 4: Launch and Evaluation</td>
+          <td>Dec Yr1 – Jun Yr2</td>
+          <td>Launch interdisciplinary Maker Space projects; pilot CS modules; review outcomes; present interim report</td>
+          <td>Evaluation report; updated resource and training plan</td>
+        </tr>
+        <tr>
+          <td>Phase 5: Full Upper-Secondary Launch</td>
+          <td>Aug Yr2 – Jun Yr3</td>
+          <td>Officially launch CS pathway; establish university partnerships; integrate pilot findings; annual review</td>
+          <td>Fully implemented CS pathway; annual SLT report; sustainability plan</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout"><p>Throughout all phases, alignment meetings occur at least once per term with programme coordinators to ensure vertical coherence and interdisciplinary consistency.</p></div>
+
+  <h2>5. Resource and Cost Plan</h2>
+  <div class="doc-table-wrap">
+    <table class="doc-table">
+      <thead><tr><th>Item</th><th>Description</th><th>Estimated Cost</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Upper-Secondary CS Certification</td><td>IB-recognised online training (~3 months)</td><td>~¥110,000</td><td>Self-paced; recommended for course leadership</td></tr>
+        <tr><td>STEM Resources (Primary)</td><td>Robotics kits, micro:bit, basic lab materials</td><td>~¥300,000</td><td>Starter set for 6–8 classrooms</td></tr>
+        <tr><td>Maker Space Enhancement</td><td>Storage, tools, consumables, signage</td><td>~¥200,000</td><td>Sustainable long-term investment</td></tr>
+        <tr><td>Professional Development Workshops</td><td>2 internal training sessions per year</td><td>~¥100,000</td><td>For materials and logistics</td></tr>
+        <tr><td>Software & Subscriptions</td><td>Online IDEs, simulations, data analysis tools</td><td>~¥60,000</td><td>Annual subscription</td></tr>
+        <tr><td><strong>Total (Pilot Phase)</strong></td><td colspan="2"><strong>~¥770,000</strong></td><td>Cost-effective use of existing infrastructure</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>6. Expected Outcomes</h2>
+  <h3>Upper-Secondary Level</h3>
+  <ul><li>A flexible CS pathway implemented by end of Year 2, comprising IB DP Computer Science, a local diploma CS course, or both, depending on student needs.</li></ul>
+  <h3>Middle School (MYP)</h3>
+  <ul><li>Computational thinking strand articulated across all year levels.</li></ul>
+  <h3>Primary Level (PYP)</h3>
+  <ul><li>Four to six new science-centred inquiry units co-developed and trialled by end of Year 1.</li></ul>
+  <h3>Whole-School</h3>
+  <ul>
+    <li>Interdisciplinary projects linking Science, Design, and ICT.</li>
+    <li>Digital and physical student portfolios evidencing inquiry and design cycles.</li>
+  </ul>
+  <h3>IB Documentation Readiness</h3>
+  <ul>
+    <li>Full upper-secondary CS documentation, including IB DP CS materials and/or local diploma course documentation.</li>
+    <li>STEM progression map connecting primary, middle school, and diploma phases.</li>
+    <li>Resource appendix detailing cost breakdown, materials, and staffing efficiency.</li>
+  </ul>
+
+  <h2>7. Risk Assessment and Mitigation</h2>
+  <div class="doc-table-wrap">
+    <table class="doc-table">
+      <thead><tr><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td>Limited teacher availability</td><td>High</td><td>Medium</td><td>Support through co-teaching and integrated unit planning.</td></tr>
+        <tr><td>Resource constraints</td><td>Medium</td><td>Medium</td><td>Phased purchasing; leverage existing Maker Space and technology.</td></tr>
+        <tr><td>Resistance to change</td><td>Medium</td><td>Medium</td><td>Incremental implementation and clear evidence of benefits.</td></tr>
+        <tr><td>Time constraints</td><td>High</td><td>Medium</td><td>Align actions with existing PD and curriculum review cycles.</td></tr>
+        <tr><td>Misalignment across programmes</td><td>Medium</td><td>High</td><td>Maintain vertical alignment map and termly coordination meetings.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>8. Evaluation and Sustainability</h2>
+  <ul>
+    <li>Annual review of curriculum integration outcomes across all programme levels.</li>
+    <li>Feedback loops from teachers and students after each inquiry cycle.</li>
+    <li>Integration of STEM progress indicators into assessment criteria across programmes.</li>
+    <li>Establishment of a digital STEM resource hub for long-term access to units and project examples.</li>
+    <li>Annual STEM Showcase connecting learners across year levels.</li>
+    <li>Ongoing teacher mentoring and micro-PD sessions to sustain capability beyond the pilot phase.</li>
+  </ul>
+
+  <h2>9. Concluding Remarks</h2>
+  <p>This proposal outlines a sustainable, cost-effective, and pedagogically grounded plan for establishing a unified STEM and Computer Science continuum. Drawing on interdisciplinary expertise spanning computational science, curriculum design, and teacher development, this initiative will strengthen the school's academic profile, inspire students, and support teachers in meaningful ways.</p>
+  <p>At every stage, student needs, interests, and wellbeing remain the primary purpose — ensuring that the programme evolves in response to what best supports learners.</p>
+
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ FRAMEWORK TAB -->
+<div class="container">
+<div id="tab-framework" class="tab-panel">
+<div class="doc-content">
+
+  <h2>1. Purpose</h2>
+  <p>This document presents a cohesive plan for embedding Science, Technology, Engineering, and Mathematics (STEM) across the primary, middle school, and diploma programmes of an international school. It broadens the school's focus from digital literacy to scientific inquiry, experimental exploration, and computational thinking. A cyclical learning model encourages students to revisit and deepen core concepts through recurring stages of discovery, reflection, and creation.</p>
+  <p>This plan supports the development of upper-secondary STEM pathways — including but not limited to the IB DP Computer Science course and relevant local diploma offerings — ensuring students have multiple options to pursue advanced STEM learning.</p>
+
+  <h2>2. Guiding Principles</h2>
+  <h3>2.1 Design Thinking in a Maker Environment</h3>
+  <p>The school adopts Design Thinking in a Maker Environment as a core pedagogical approach, aligned with the mission to cultivate compassionate, creative, and empowered learners who take meaningful action within an international community. Within a safe, inclusive, and resource-rich maker environment, students:</p>
+  <ul>
+    <li>Construct knowledge through tinkering, experimentation, failure, and refinement.</li>
+    <li>Normalise risk-taking and develop resilience and adaptability.</li>
+    <li>View challenges as opportunities for innovation and growth.</li>
+    <li>Leverage diverse perspectives to produce more meaningful and human-centred solutions.</li>
+  </ul>
+  <div class="doc-table-wrap">
+    <table class="doc-table">
+      <thead><tr><th>Design Thinking Stage</th><th>Connects to IB PYP Inquiry</th><th>Connects to Rhythm Model</th></tr></thead>
+      <tbody>
+        <tr><td>Empathise & Inquire</td><td>Tuning In, Finding Out</td><td>Experience</td></tr>
+        <tr><td>Ideate & Plan</td><td>Going Further</td><td>Reflection + Brainstorming</td></tr>
+        <tr><td>Create & Prototype</td><td>Making & Action</td><td>Hands-on Experimentation</td></tr>
+        <tr><td>Test & Improve</td><td>Reflecting, Evaluating</td><td>Return and Refine</td></tr>
+        <tr><td>Share Impact</td><td>Taking Action</td><td>Communicating Learning</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>2.2 Equitable and Progressive STEM Access</h3>
+  <ol>
+    <li>Equity and inclusion: All students have structured entry points into experimentation and computational thinking.</li>
+    <li>Science as the core of STEM: Students learn to observe, hypothesise, experiment, and connect patterns before applying technology.</li>
+    <li>Inquiry-based progression: All learning starts from curiosity, hands-on exploration, and links to authentic contexts.</li>
+    <li>Cyclical reinforcement: Concepts are revisited at increasing levels of depth.</li>
+    <li>Teacher empowerment: Teachers are supported through planning, modelling, and co-teaching sessions.</li>
+    <li>Continuity and coherence: Each programme builds upon the previous one, preparing students for complex reasoning across upper-secondary STEM pathways.</li>
+    <li>Design Thinking: A Maker Space environment enables students to construct knowledge through iterative creation, collaboration, and reflection.</li>
+  </ol>
+
+  <h2>3. Areas of Responsibility</h2>
+  <div class="doc-table-wrap">
+    <table class="doc-table">
+      <thead><tr><th>Area</th><th>Responsibilities</th><th>Key Deliverable</th></tr></thead>
+      <tbody>
+        <tr><td>Curriculum Design</td><td>Map STEM progression PYP → DP; integrate science inquiry into primary planning; develop upper-secondary CS documentation.</td><td>STEM progression map; DP CS syllabus</td></tr>
+        <tr><td>Maker Space</td><td>Link Maker Space to inquiry units and MYP projects; emphasise scientific investigation through building.</td><td>Maker Space schedule; interdisciplinary project outlines</td></tr>
+        <tr><td>Teacher Collaboration</td><td>Co-design and co-teach primary inquiry units with strong science foundations.</td><td>Lesson templates; planning frameworks</td></tr>
+        <tr><td>Professional Development</td><td>Facilitate workshops on inquiry-based science, computational thinking, and cyclical learning.</td><td>Workshop materials; teacher reflection reports</td></tr>
+        <tr><td>DP Preparation</td><td>Obtain IB DP CS certification; oversee readiness and IB authorisation process.</td><td>Certification; course approval documentation</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>4. Programme Integration</h2>
+  <h3>4.1 Primary Level (PYP)</h3>
+  <p>Goal: Reinforce foundational scientific curiosity and conceptual understanding while developing early design and computational thinking skills, aligned with PYP transdisciplinary themes and key concepts (Form, Function, Change, and Connection).</p>
+  <div class="doc-table-wrap">
+    <table class="doc-table">
+      <thead><tr><th>Unit of Inquiry</th><th>Scientific Foundation</th><th>STEM Connections</th><th>Repetition Cycle</th></tr></thead>
+      <tbody>
+        <tr><td>How the World Works</td><td>Observation and experimentation with states of matter</td><td>Temperature sensors (micro:bit) to measure changes</td><td>Revisit through later energy unit</td></tr>
+        <tr><td>How We Organise Ourselves</td><td>Simple circuits and energy flow</td><td>Design models of systems (traffic lights, communication)</td><td>Return to systems thinking in MYP digital networks</td></tr>
+        <tr><td>Sharing the Planet</td><td>Experiments with soil, water, light, and plant growth</td><td>Design mini greenhouses</td><td>Revisit with MYP environmental data analysis</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>4.2 Middle School (MYP)</h3>
+  <p>Goal: Build analytical and computational reasoning through projects that connect scientific principles with technology and design. This stage emphasises ATL skills: critical thinking, data literacy, collaboration, and self-management.</p>
+  <p>Core strands: scientific inquiry and modelling; computational thinking and coding (Python); design and engineering; data literacy.</p>
+  <div class="doc-table-wrap">
+    <table class="doc-table">
+      <thead><tr><th>Unit</th><th>Scientific Focus</th><th>STEM Integration</th><th>Progression</th></tr></thead>
+      <tbody>
+        <tr><td>Energy Transformations (Science)</td><td>Conservation and transfer of energy</td><td>Build models using sensors and microcontrollers</td><td>Revisits primary units on energy</td></tr>
+        <tr><td>Smart Cities (Design)</td><td>Systems thinking, sustainability</td><td>Prototype responsive environments</td><td>Builds on primary system models</td></tr>
+        <tr><td>Data and the Environment (Interdisciplinary)</td><td>Measurement and uncertainty</td><td>Analyse real environmental data using Python</td><td>Reinforces data handling before DP</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>4.3 Upper-Secondary Level (DP)</h3>
+  <p>Goal: Provide multiple advanced STEM pathways within both the IB Diploma and local diploma programmes, including Computer Science. Maker-based design thinking continues into upper-secondary, supporting prototyping, algorithmic modelling, and solution evaluation.</p>
+  <div class="doc-table-wrap">
+    <table class="doc-table">
+      <thead><tr><th>Topic</th><th>Focus</th><th>Scientific Extension</th></tr></thead>
+      <tbody>
+        <tr><td>System fundamentals</td><td>How systems interact and fail</td><td>Connection to ecosystems and feedback loops</td></tr>
+        <tr><td>Computer organisation</td><td>How computers process information</td><td>Links to physics concepts</td></tr>
+        <tr><td>Networks</td><td>How data travels and connects people</td><td>Apply to communication in natural systems</td></tr>
+        <tr><td>Computational thinking</td><td>Logical and algorithmic reasoning</td><td>Simulations of population or energy systems</td></tr>
+        <tr><td>Case study</td><td>IB-provided scenario</td><td>Integrate ethical and scientific perspectives</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>5. Professional Development and Teacher Collaboration</h2>
+  <div class="doc-table-wrap">
+    <table class="doc-table">
+      <thead><tr><th>Timing</th><th>Focus Area</th><th>Format</th></tr></thead>
+      <tbody>
+        <tr><td>Early term</td><td>Inquiry-based science and concept development</td><td>Co-planning sessions with examples</td></tr>
+        <tr><td>Mid-year</td><td>Using cyclical learning to deepen understanding</td><td>Workshop on reflective practice and scaffolding</td></tr>
+        <tr><td>End of year</td><td>Sharing projects and outcomes</td><td>Showcase and teacher reflection circle</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>5.1 Reflection and Documentation</h3>
+  <p>Teachers document reflections through short collaborative journals, supporting peer observation and shared inquiry into classroom practice. Informal mentoring and drop-in sessions are available throughout the year. Reflection templates and examples are shared in the resource hub.</p>
+
+  <h2>6. Learning Rhythm Model</h2>
+  <p>Building on research into cyclical and experiential learning, this framework applies three stages across all units:</p>
+  <ol>
+    <li><strong style="font-weight:500;color:var(--text-primary)">Experience:</strong> Engage the senses through hands-on exploration and observation.</li>
+    <li><strong style="font-weight:500;color:var(--text-primary)">Reflection:</strong> Retell, illustrate, or discuss the experience, linking it to conceptual understanding.</li>
+    <li><strong style="font-weight:500;color:var(--text-primary)">Return:</strong> Revisit the same idea later through a new context, adding complexity or abstraction.</li>
+  </ol>
+  <p>This approach strengthens memory, understanding, and curiosity. It fits naturally within the IB inquiry model, especially in the Tuning In and Going Further stages.</p>
+  <h3>6.1 Assessment Philosophy</h3>
+  <p>Assessment focuses on conceptual understanding, process skills, and reflection rather than isolated outcomes. Students maintain digital portfolios documenting their inquiry cycles, reflections, and design iterations. Assessment aligns with IB criteria across programmes, emphasising conceptual understanding, scientific reasoning, and computational processes.</p>
+
+  <h2>7. STEM Vertical Articulation</h2>
+  <h3>Computational Thinking Progression</h3>
+  <div class="doc-table-wrap">
+    <table class="doc-table">
+      <thead><tr><th>Level</th><th>Stage</th><th>Core Focus</th></tr></thead>
+      <tbody>
+        <tr><td>ELC – Kindergarten</td><td>Recognition</td><td>Everyday algorithms and patterns in routines</td></tr>
+        <tr><td>Grades 1–2</td><td>Creation</td><td>Simple event-driven programs with basic loops</td></tr>
+        <tr><td>Grades 3–4</td><td>Control</td><td>Control structures, iteration, and refinement through testing</td></tr>
+        <tr><td>Grade 5</td><td>Design</td><td>Conditionals, variables, and multi-component program design</td></tr>
+        <tr><td>Grades 6–7</td><td>Structured coding</td><td>Block-based coding; variables and conditionals</td></tr>
+        <tr><td>Grades 8–9</td><td>Programming</td><td>Python; modelling and basic data analysis</td></tr>
+        <tr><td>Grade 10</td><td>Algorithmic design</td><td>System simulation and ethical reflection on digital technologies</td></tr>
+        <tr><td>DP</td><td>Formalisation</td><td>Rigorous analytical and design frameworks; ethical application</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>8. Upper-Secondary CS Documentation</h2>
+  <h3>8.1 Course Overview and Aims</h3>
+  <p>The Computer Science course develops computational thinking, analytical reasoning, and systems understanding. Students learn to design, implement, and evaluate computing solutions that address real-world problems, with a strong focus on ethical and scientific contexts.</p>
+  <ul>
+    <li>Apply scientific reasoning and computational thinking in solving authentic problems.</li>
+    <li>Develop independent learners who design, test, and evaluate digital systems.</li>
+    <li>Understand the social, environmental, and ethical implications of computing.</li>
+  </ul>
+  <h3>8.2 Syllabus Structure</h3>
+  <p>Core topics: system fundamentals; computer organisation; networks; computational thinking and problem solving; case study.</p>
+  <p>Higher Level extensions: abstract data structures; resource management; control systems and simulations.</p>
+  <h3>8.3 Assessment Outline</h3>
+  <ul>
+    <li>External assessment: IB written examinations (~70% weighting).</li>
+    <li>Internal assessment: Individual software development project (~30 hours) including problem definition, design, testing, evaluation, and reflection (~30% weighting).</li>
+    <li>Formative assessment: code reviews, lab reports, and portfolio entries documenting inquiry and design cycles.</li>
+  </ul>
+  <h3>8.4 Resources and Lab Plan</h3>
+  <p>Software: Java (IB-assessed) and Python (conceptual teaching), VS Code or Replit, GitHub for version control, data analysis libraries, and simulation environments. Hardware: laptops, sensors, and optional microcontrollers. The Maker Space is used for prototyping and hardware-related IA projects.</p>
+
+</div>
+</div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <a href="../index.html">Filipe Teixeira</a> · <a href="../index.html#projects">Back to Projects</a>
+  </div>
+</footer>
+
+<script>
+const tabs = document.querySelectorAll('.tab-btn');
+const panels = document.querySelectorAll('.tab-panel');
+tabs.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    window.scrollTo({ top: document.querySelector('.tab-bar').offsetTop - 70, behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
